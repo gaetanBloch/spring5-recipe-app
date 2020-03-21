@@ -1,6 +1,9 @@
 package guru.springframework.spring5recipeapp.services;
 
 import com.google.common.collect.ImmutableSet;
+import guru.springframework.spring5recipeapp.commands.RecipeCommand;
+import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
+import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import org.junit.Before;
@@ -19,14 +22,19 @@ import static org.mockito.Mockito.*;
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceImplTest {
     private static final Long ID = 1L;
+    private static final String DESCRIPTION = "description";
 
     RecipeServiceImpl recipeService;
     @Mock
     RecipeRepository recipeRepository;
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Before
     public void setUp() {
-        recipeService = new RecipeServiceImpl(recipeRepository);
+        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
     }
 
     @Test
@@ -70,5 +78,36 @@ public class RecipeServiceImplTest {
 
         // Then
         // RuntimeException thrown
+    }
+
+    @Test
+    public void saveRecipeCommandTest() {
+        // Given
+        Recipe recipe = Recipe.builder().id(ID).description(DESCRIPTION).build();
+        RecipeCommand recipeCommand = RecipeCommand.builder().id(ID).description(DESCRIPTION).build();
+        when(recipeCommandToRecipe.convert(recipeCommand)).thenReturn(recipe);
+        when(recipeRepository.save(recipe)).thenReturn(recipe);
+        when(recipeToRecipeCommand.convert(recipe)).thenReturn(recipeCommand);
+        RecipeCommand savedRecipeCommand;
+
+        // When
+        savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
+
+        // Then
+        assertNotNull(savedRecipeCommand);
+        assertEquals(ID, savedRecipeCommand.getId());
+        assertEquals(DESCRIPTION, savedRecipeCommand.getDescription());
+        verify(recipeCommandToRecipe).convert(recipeCommand);
+        verify(recipeRepository).save(recipe);
+        verify(recipeToRecipeCommand).convert(recipe);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void saveRecipeCommandNullTest() {
+        // When
+        recipeService.saveRecipeCommand(null);
+
+        // Then
+        // NPE thrown
     }
 }
