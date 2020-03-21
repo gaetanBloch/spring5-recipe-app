@@ -79,7 +79,8 @@
                                 <h5>URL:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p th:text="${recipe.url}">http://www.example.com</p>
+                                <p><a href="#" th:href="${recipe.url}" th:text="'Click here'">
+                                    http://www.example.com</a></p>
                             </div>
                         </div>
                     </div>
