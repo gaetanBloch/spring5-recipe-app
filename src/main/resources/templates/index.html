@@ -37,9 +37,17 @@
                                 <th>Description</th>
                             </tr>
                             </thead>
+                            <tr th:remove="all">
+                                <td>123</td>
+                                <td>Tasty Goodnees 1</td>
+                            </tr>
+                            <tr th:remove="all">
+                                <td>12333</td>
+                                <td>Tasty Goodnees 2</td>
+                            </tr>
                             <tr th:each="recipe : ${recipes}">
-                                <td th:text="${recipe.id}"></td>
-                                <td th:text="${recipe.description}"></td>
+                                <td th:text="${recipe.id}">334</td>
+                                <td th:text="${recipe.description}">Tasty Goodnees 3</td>
                             </tr>
                         </table>
                     </div>
