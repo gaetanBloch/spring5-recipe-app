@@ -4,7 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"recipe"})
 @AllArgsConstructor
 @NoArgsConstructor

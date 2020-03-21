@@ -6,7 +6,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(exclude = {"recipes"})
 @NoArgsConstructor
 @AllArgsConstructor
