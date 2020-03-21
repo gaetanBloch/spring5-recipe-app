@@ -15,7 +15,7 @@ public class CategoryTest {
     }
 
     @Test
-    public void getId() {
+    public void getIdTest() {
         // Given
         final Long idValue = 4L;
 
@@ -24,13 +24,5 @@ public class CategoryTest {
 
         // Then
         assertEquals(idValue, category.getId());
-    }
-
-    @Test
-    public void getDescription() {
-    }
-
-    @Test
-    public void getRecipes() {
     }
 }

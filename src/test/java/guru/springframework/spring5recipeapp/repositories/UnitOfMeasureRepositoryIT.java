@@ -24,7 +24,7 @@ public class UnitOfMeasureRepositoryIT {
     }
 
     @Test
-    public void findByDescriptionTeaspoon() {
+    public void findByDescriptionTeaspoonTest() {
         // Given
         final String teaspoon = "Teaspoon";
         Optional<UnitOfMeasure> unitOfMeasure;
@@ -37,7 +37,7 @@ public class UnitOfMeasureRepositoryIT {
     }
 
     @Test
-    public void findByDescriptionCup() {
+    public void findByDescriptionCupTest() {
         // Given
         final String cup = "Cup";
         Optional<UnitOfMeasure> unitOfMeasure;
