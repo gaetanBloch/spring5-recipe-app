@@ -1,13 +1,15 @@
 package guru.springframework.spring5recipeapp.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(exclude = {"recipe"})
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class Ingredient {
     @Id
@@ -19,10 +21,6 @@ public class Ingredient {
     private UnitOfMeasure uom;
     @ManyToOne
     private Recipe recipe;
-
-    public Ingredient() {
-
-    }
 
     public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom) {
         this.description = description;

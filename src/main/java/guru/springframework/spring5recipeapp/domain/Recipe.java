@@ -1,11 +1,14 @@
 package guru.springframework.spring5recipeapp.domain;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Entity
 public class Recipe {
@@ -20,6 +23,7 @@ public class Recipe {
     private String url;
     @Lob
     private String directions;
+    @Singular
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients = new HashSet<>();
     @Lob
@@ -28,6 +32,7 @@ public class Recipe {
     private Difficulty difficulty;
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
+    @Singular
     @ManyToMany
     @JoinTable(name = "recipe_category",
             joinColumns = @JoinColumn(name = "recipe_id"),

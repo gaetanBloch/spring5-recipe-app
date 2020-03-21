@@ -1,12 +1,14 @@
 package guru.springframework.spring5recipeapp.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Data
 @EqualsAndHashCode(exclude = {"recipe"})
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 public class Notes {
     @Id
