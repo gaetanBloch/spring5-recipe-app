@@ -1,5 +1,6 @@
 package guru.springframework.spring5recipeapp.controllers;
 
+import guru.springframework.spring5recipeapp.TestUtils;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.Before;
@@ -20,11 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeControllerTest {
-    private static final Long ID = 1L;
-
-    RecipeController recipeController;
+    private RecipeController recipeController;
     @Mock
-    RecipeService recipeService;
+    private RecipeService recipeService;
 
     @Before
     public void setUp() {
@@ -34,11 +33,11 @@ public class RecipeControllerTest {
     @Test
     public void getRecipeTest() throws Exception {
         // Given
-        when(recipeService.findById(ID)).thenReturn(Recipe.builder().id(ID).build());
+        when(recipeService.findById(TestUtils.ID)).thenReturn(Recipe.builder().id(TestUtils.ID).build());
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(recipeController).build();
 
         // When
-        mockMvc.perform(get("/recipe/show/" + ID))
+        mockMvc.perform(get("/recipe/show/" + TestUtils.ID))
 
                 // Then
                 .andExpect(status().isOk())

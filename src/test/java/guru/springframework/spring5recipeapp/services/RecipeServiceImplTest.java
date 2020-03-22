@@ -1,6 +1,7 @@
 package guru.springframework.spring5recipeapp.services;
 
 import com.google.common.collect.ImmutableSet;
+import guru.springframework.spring5recipeapp.TestUtils;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
@@ -21,16 +22,14 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeServiceImplTest {
-    private static final Long ID = 1L;
-    private static final String DESCRIPTION = "description";
 
-    RecipeServiceImpl recipeService;
+    private RecipeServiceImpl recipeService;
     @Mock
-    RecipeRepository recipeRepository;
+    private RecipeRepository recipeRepository;
     @Mock
-    RecipeCommandToRecipe recipeCommandToRecipe;
+    private RecipeCommandToRecipe recipeCommandToRecipe;
     @Mock
-    RecipeToRecipeCommand recipeToRecipeCommand;
+    private RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Before
     public void setUp() {
@@ -55,26 +54,26 @@ public class RecipeServiceImplTest {
     @Test
     public void getRecipeByIdTest() {
         // Given
-        Optional<Recipe> recipe = Optional.of(Recipe.builder().id(ID).build());
-        when(recipeRepository.findById(ID)).thenReturn(recipe);
+        Optional<Recipe> recipe = Optional.of(Recipe.builder().id(TestUtils.ID).build());
+        when(recipeRepository.findById(TestUtils.ID)).thenReturn(recipe);
         Recipe recipeReturned;
 
         // When
-        recipeReturned = recipeService.findById(ID);
+        recipeReturned = recipeService.findById(TestUtils.ID);
 
         //Then
         assertNotNull("Null recipe returned", recipeReturned);
-        verify(recipeRepository, times(1)).findById(ID);
+        verify(recipeRepository, times(1)).findById(TestUtils.ID);
         verify(recipeRepository, never()).findAll();
     }
 
     @Test(expected = RuntimeException.class)
     public void getRecipeByIdNotFoundTest() {
         // Given
-        when(recipeRepository.findById(ID)).thenReturn(Optional.empty());
+        when(recipeRepository.findById(TestUtils.ID)).thenReturn(Optional.empty());
 
         // When
-        recipeService.findById(ID);
+        recipeService.findById(TestUtils.ID);
 
         // Then
         // RuntimeException thrown
@@ -83,8 +82,8 @@ public class RecipeServiceImplTest {
     @Test
     public void saveRecipeCommandTest() {
         // Given
-        Recipe recipe = Recipe.builder().id(ID).description(DESCRIPTION).build();
-        RecipeCommand recipeCommand = RecipeCommand.builder().id(ID).description(DESCRIPTION).build();
+        Recipe recipe = Recipe.builder().id(TestUtils.ID).description(TestUtils.DESCRIPTION).build();
+        RecipeCommand recipeCommand = RecipeCommand.builder().id(TestUtils.ID).description(TestUtils.DESCRIPTION).build();
         when(recipeCommandToRecipe.convert(recipeCommand)).thenReturn(recipe);
         when(recipeRepository.save(recipe)).thenReturn(recipe);
         when(recipeToRecipeCommand.convert(recipe)).thenReturn(recipeCommand);
@@ -95,8 +94,8 @@ public class RecipeServiceImplTest {
 
         // Then
         assertNotNull(savedRecipeCommand);
-        assertEquals(ID, savedRecipeCommand.getId());
-        assertEquals(DESCRIPTION, savedRecipeCommand.getDescription());
+        assertEquals(TestUtils.ID, savedRecipeCommand.getId());
+        assertEquals(TestUtils.DESCRIPTION, savedRecipeCommand.getDescription());
         verify(recipeCommandToRecipe).convert(recipeCommand);
         verify(recipeRepository).save(recipe);
         verify(recipeToRecipeCommand).convert(recipe);

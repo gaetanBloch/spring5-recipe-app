@@ -22,11 +22,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class IndexControllerTest {
 
-    IndexController indexController;
+    private IndexController indexController;
     @Mock
-    RecipeService recipeService;
+    private RecipeService recipeService;
     @Mock
-    Model model;
+    private Model model;
 
     @Before
     public void setUp() throws Exception {

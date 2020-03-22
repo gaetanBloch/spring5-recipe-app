@@ -1,5 +1,6 @@
 package guru.springframework.spring5recipeapp.services;
 
+import guru.springframework.spring5recipeapp.TestUtils;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
@@ -22,15 +23,14 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RecipeServiceIT {
-    private static final String DESCRIPTION = "DESCRIPTION";
     @Autowired
-    RecipeService recipeService;
+    private RecipeService recipeService;
     @Autowired
-    RecipeRepository recipeRepository;
+    private RecipeRepository recipeRepository;
     @Autowired
-    RecipeCommandToRecipe recipeCommandToRecipe;
+    private RecipeCommandToRecipe recipeCommandToRecipe;
     @Autowired
-    RecipeToRecipeCommand recipeToRecipeCommand;
+    private RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Transactional
     @Test
@@ -42,13 +42,13 @@ public class RecipeServiceIT {
 
         // When
         if (recipeCommand != null) {
-            recipeCommand.setDescription(DESCRIPTION);
+            recipeCommand.setDescription(TestUtils.DESCRIPTION);
         }
         savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
 
         // Then
         assertNotNull(savedRecipeCommand);
-        assertEquals(DESCRIPTION, savedRecipeCommand.getDescription());
+        assertEquals(TestUtils.DESCRIPTION, savedRecipeCommand.getDescription());
         assertEquals(recipe.getId(), savedRecipeCommand.getId());
         assertEquals(recipe.getCategories().size(), savedRecipeCommand.getCategories().size());
         assertEquals(recipe.getIngredients().size(), savedRecipeCommand.getIngredients().size());
