@@ -79,7 +79,7 @@
                                 <h5>URL:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p><a href="#" th:href="${recipe.url}" th:text="'Click here'">
+                                <p><a href="#" th:href="${recipe.url}" th:text="'View Original'">
                                     http://www.example.com</a></p>
                             </div>
                         </div>
@@ -87,8 +87,17 @@
                 </div>
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <h1 class="panel-title">Ingredients</h1>
+                        <div class="row">
+                            <div class="col-md-11">
+                                <h1 class="panel-title">Ingredients</h1>
+                            </div>
+                            <div class="col-md-1" style="padding: 0">
+                                <a class="btn btn-default" role="button"
+                                   th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">View</a>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -136,7 +145,8 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p th:text="${recipe.notes.recipeNotes}">Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+                                <p th:text="${recipe.notes.recipeNotes}">Lorem ipsum dolor sit amet, consectetuer
+                                    adipiscing elit.
                                     Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et
                                     magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies
                                     nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede
