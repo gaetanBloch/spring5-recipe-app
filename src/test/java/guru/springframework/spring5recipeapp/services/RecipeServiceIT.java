@@ -38,13 +38,12 @@ public class RecipeServiceIT {
         // Given
         Recipe recipe = recipeRepository.findAll().iterator().next();
         RecipeCommand recipeCommand = recipeToRecipeCommand.convert(recipe);
-        RecipeCommand savedRecipeCommand;
 
         // When
         if (recipeCommand != null) {
             recipeCommand.setDescription(TestUtils.DESCRIPTION);
         }
-        savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
+        RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
 
         // Then
         assertNotNull(savedRecipeCommand);
