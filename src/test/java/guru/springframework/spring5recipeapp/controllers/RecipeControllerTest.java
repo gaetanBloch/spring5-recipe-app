@@ -40,7 +40,7 @@ public class RecipeControllerTest {
         when(recipeService.findById(TestUtils.ID)).thenReturn(Recipe.builder().id(TestUtils.ID).build());
 
         // When
-        mockMvc.perform(get("/recipe/show/" + TestUtils.ID))
+        mockMvc.perform(get("/recipe/" + TestUtils.ID +"/show"))
 
                 // Then
                 .andExpect(status().isOk())
@@ -73,6 +73,6 @@ public class RecipeControllerTest {
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/show/" + TestUtils.ID));
+                .andExpect(view().name("redirect:/recipe/" + TestUtils.ID +"/show" ));
     }
 }
