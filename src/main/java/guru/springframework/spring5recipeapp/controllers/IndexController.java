@@ -10,15 +10,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-public class IndexController {
-
+final class IndexController {
     private final RecipeService recipeService;
 
     @GetMapping({"", "/", "/index"})
     public String getIndexPage(Model model) {
-        log.debug("Getting Index Page...");
+        log.debug("Loading Index Page...");
         model.addAttribute("recipes", recipeService.getRecipes());
-        log.debug("Getting Index Page... OK");
+        log.debug("Loading Index Page... OK");
         return "index";
     }
 }

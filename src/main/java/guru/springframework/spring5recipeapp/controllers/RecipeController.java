@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
  */
 @Controller
 @RequiredArgsConstructor
-public class RecipeController {
+final class RecipeController {
 
     private final RecipeService recipeService;
 

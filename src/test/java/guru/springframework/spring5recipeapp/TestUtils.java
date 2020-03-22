@@ -10,6 +10,8 @@ import java.math.BigDecimal;
  */
 public final class TestUtils {
     public static final Long ID = 1L;
+    public static final Long ID2 = 2L;
+    public static final Long ID3 = 3L;
     public static final String DESCRIPTION = "description";
     public static final BigDecimal AMOUNT =  BigDecimal.valueOf(1);
     public static final Long UOM_ID = 2L;
