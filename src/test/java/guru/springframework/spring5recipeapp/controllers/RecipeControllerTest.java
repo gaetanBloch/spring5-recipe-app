@@ -1,6 +1,5 @@
 package guru.springframework.spring5recipeapp.controllers;
 
-import guru.springframework.spring5recipeapp.TestUtils;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.services.RecipeService;
@@ -13,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static guru.springframework.spring5recipeapp.TestUtils.ID;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,10 +37,10 @@ public class RecipeControllerTest {
     @Test
     public void getRecipeTest() throws Exception {
         // Given
-        when(recipeService.findById(TestUtils.ID)).thenReturn(Recipe.builder().id(TestUtils.ID).build());
+        when(recipeService.findById(ID)).thenReturn(Recipe.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get("/recipe/" + TestUtils.ID +"/show"))
+        mockMvc.perform(get("/recipe/" + ID +"/show"))
 
                 // Then
                 .andExpect(status().isOk())
@@ -62,7 +62,7 @@ public class RecipeControllerTest {
     @Test
     public void postNewRecipeFormTest() throws Exception {
         // Given
-        when(recipeService.saveRecipeCommand(any())).thenReturn(RecipeCommand.builder().id(TestUtils.ID).build());
+        when(recipeService.saveRecipeCommand(any())).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
         mockMvc.perform(post("/recipe")
@@ -73,6 +73,20 @@ public class RecipeControllerTest {
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/" + TestUtils.ID +"/show" ));
+                .andExpect(view().name("redirect:/recipe/" + ID +"/show" ));
+    }
+
+    @Test
+    public void getUpdateRecipeFormTest() throws Exception {
+        // Given
+        when(recipeService.findCommandById(ID)).thenReturn(RecipeCommand.builder().id(ID).build());
+
+        // When
+        mockMvc.perform(get("/recipe/" + ID + "/update"))
+
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/recipeform"))
+                .andExpect(model().attributeExists("recipe"));
     }
 }

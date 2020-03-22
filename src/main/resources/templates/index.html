@@ -36,22 +36,26 @@
                                 <th>ID</th>
                                 <th>Description</th>
                                 <th>View</th>
+                                <th>Update</th>
                             </tr>
                             </thead>
                             <tr th:remove="all">
                                 <td>123</td>
                                 <td>Tasty Goodnees 1</td>
                                 <td><a href="#">View</a></td>
+                                <td><a href="#">Update</a></td>
                             </tr>
                             <tr th:remove="all">
                                 <td>12333</td>
                                 <td>Tasty Goodnees 2</td>
                                 <td><a href="#">View</a></td>
+                                <td><a href="#">Update</a></td>
                             </tr>
                             <tr th:each="recipe : ${recipes}">
                                 <td th:text="${recipe.id}">334</td>
                                 <td th:text="${recipe.description}">Tasty Goodnees 3</td>
                                 <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/show' }">View</a></td>
+                                <td><a href="#" th:href="@{'/recipe/' + ${recipe.id} + '/update'}">Update</a></td>
                             </tr>
                         </table>
                     </div>
