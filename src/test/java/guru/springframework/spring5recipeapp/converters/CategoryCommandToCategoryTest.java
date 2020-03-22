@@ -38,10 +38,9 @@ public class CategoryCommandToCategoryTest {
                 .description(DESCRIPTION)
                 .id(ID)
                 .build();
-        Category category;
 
         // When
-        category = converter.convert(categoryCommand);
+        Category category = converter.convert(categoryCommand);
 
         // Then
         assertNotNull(category);

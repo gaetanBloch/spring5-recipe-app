@@ -38,10 +38,9 @@ public class UnitOfMeasureCommandToUnitOfMeasureTest {
                 .description(DESCRIPTION)
                 .id(ID)
                 .build();
-        UnitOfMeasure uom;
 
         // When
-        uom = converter.convert(uomCommand);
+        UnitOfMeasure uom = converter.convert(uomCommand);
 
         // Then
         assertNotNull(uom);

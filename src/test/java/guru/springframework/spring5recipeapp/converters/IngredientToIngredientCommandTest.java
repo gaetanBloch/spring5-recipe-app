@@ -34,7 +34,6 @@ public class IngredientToIngredientCommandTest {
     @Test
     public void convertTest() {
         // Given
-        IngredientCommand ingredientCommand;
         Ingredient ingredient = Ingredient.builder()
                 .uom(UnitOfMeasure.builder().id(UOM_ID).build())
                 .id(ID)
@@ -43,7 +42,7 @@ public class IngredientToIngredientCommandTest {
                 .build();
 
         // When
-        ingredientCommand = converter.convert(ingredient);
+        IngredientCommand ingredientCommand = converter.convert(ingredient);
 
         // Then
         assertNotNull(ingredientCommand);
@@ -57,7 +56,6 @@ public class IngredientToIngredientCommandTest {
     @Test
     public void convertWithNullUOMTest() {
         // Given
-        IngredientCommand ingredientCommand;
         Ingredient ingredient = Ingredient.builder()
                 .id(ID)
                 .description(DESCRIPTION)
@@ -65,7 +63,7 @@ public class IngredientToIngredientCommandTest {
                 .build();
 
         // When
-        ingredientCommand = converter.convert(ingredient);
+        IngredientCommand ingredientCommand = converter.convert(ingredient);
 
         // Then
         assertNotNull(ingredientCommand);

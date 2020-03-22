@@ -38,10 +38,9 @@ public class NotesCommandToNotesTest {
                 .recipeNotes(RECIPE_NOTES)
                 .id(ID)
                 .build();
-        Notes notes;
 
         // When
-        notes = converter.convert(notesCommand);
+        Notes notes = converter.convert(notesCommand);
 
         // Then
         assertNotNull(notes);

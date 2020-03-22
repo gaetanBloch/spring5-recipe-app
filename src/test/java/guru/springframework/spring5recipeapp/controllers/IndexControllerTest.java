@@ -1,5 +1,6 @@
 package guru.springframework.spring5recipeapp.controllers;
 
+import com.google.common.collect.ImmutableSet;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.Before;
@@ -12,13 +13,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class IndexControllerTest {
 
@@ -44,23 +43,19 @@ public class IndexControllerTest {
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name("index"));
+                .andExpect(view().name("index"))
+                .andExpect(model().attributeExists("recipes"));
     }
 
     @Test
     public void getIndexPage() {
         // Given
-        String index;
-        Set<Recipe> recipes = new HashSet<>();
-        Recipe recipe = new Recipe();
-        recipe.setDescription("description");
-        recipes.add(recipe);
-        recipes.add(new Recipe());
+        Set<Recipe> recipes = ImmutableSet.of(Recipe.builder().description("description").build(), new Recipe());
         when(recipeService.getRecipes()).thenReturn(recipes);
         ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
 
         // When
-        index = indexController.getIndexPage(model);
+        String index = indexController.getIndexPage(model);
 
         // Then
         assertEquals("index", index);

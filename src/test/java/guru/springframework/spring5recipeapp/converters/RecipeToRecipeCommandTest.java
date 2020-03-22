@@ -41,7 +41,6 @@ public class RecipeToRecipeCommandTest {
     @Test
     public void convertTest() {
         // Given
-        RecipeCommand recipeCommand;
         Recipe recipe = Recipe.builder()
                 .id(ID)
                 .description(DESCRIPTION)
@@ -64,7 +63,7 @@ public class RecipeToRecipeCommandTest {
                 .build();
 
         // When
-        recipeCommand = converter.convert(recipe);
+        RecipeCommand recipeCommand = converter.convert(recipe);
 
         // Then
         assertNotNull(recipeCommand);
