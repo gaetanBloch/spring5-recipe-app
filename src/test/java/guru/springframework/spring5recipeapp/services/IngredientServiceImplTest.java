@@ -94,12 +94,45 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void createRecipeIngredientTest() {
+    public void saveRecipeIngredientTest() {
         // Given
+        // We rely on the ingredient id here
         IngredientCommand ingredientCommand = IngredientCommand.builder().id(ID3).recipeId(ID2).build();
         Recipe recipe = new Recipe();
         recipe.setId(ID2);
         recipe.addIngredient(Ingredient.builder().id(ID3).build());
+        when(recipeRepository.findById(ID2)).thenReturn(Optional.of(new Recipe()));
+        when(recipeRepository.save(any())).thenReturn(recipe);
+
+        // When
+        IngredientCommand savedIngredientCommand = ingredientService.saveIngredientCommand(ingredientCommand);
+
+        // Then
+        assertNotNull(savedIngredientCommand);
+        assertEquals(ID3, savedIngredientCommand.getId());
+        assertEquals(ID2, savedIngredientCommand.getRecipeId());
+        verify(recipeRepository).findById(ID2);
+        verify(recipeRepository).save(any());
+    }
+
+    @Test
+    public void createRecipeIngredientTest() {
+        // Given
+        // For new ingredient the id is not set so we rely on the description, amount and UOM
+        IngredientCommand ingredientCommand = IngredientCommand.builder()
+                .recipeId(ID2)
+                .description(DESCRIPTION)
+                .amount(AMOUNT)
+                .uom(UnitOfMeasureCommand.builder().id(UOM_ID).build())
+                .build();
+        Recipe recipe = new Recipe();
+        recipe.setId(ID2);
+        recipe.addIngredient(Ingredient.builder()
+                .id(ID3)
+                .description(DESCRIPTION)
+                .amount(AMOUNT)
+                .uom(UnitOfMeasure.builder().id(UOM_ID).build())
+                .build());
         when(recipeRepository.findById(ID2)).thenReturn(Optional.of(new Recipe()));
         when(recipeRepository.save(any())).thenReturn(recipe);
 
