@@ -94,7 +94,8 @@
                                     <h1 class="panel-title">Ingredients</h1>
                                 </div>
                                 <div class="col-md-1" style="padding: 0">
-                                    <a class="btn btn-default" href="#" role="button">Edit</a>
+                                    <a class="btn btn-default" href="#" th:href="@{'/recipe/' + ${recipe.id} +
+                                     '/ingredients'}" role="button">View</a>
                                 </div>
                             </div>
                         </div>

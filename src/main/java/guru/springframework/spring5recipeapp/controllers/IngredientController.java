@@ -1,6 +1,7 @@
 package guru.springframework.spring5recipeapp.controllers;
 
 import guru.springframework.spring5recipeapp.commands.IngredientCommand;
+import guru.springframework.spring5recipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.spring5recipeapp.services.IngredientService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import guru.springframework.spring5recipeapp.services.UnitOfMeasureService;
@@ -38,6 +39,23 @@ final class IngredientController {
                 Long.valueOf(recipeId), Long.valueOf(id)
         ));
         return "recipe/ingredient/show";
+    }
+
+    @GetMapping("/recipe/{recipeId}/ingredient/new")
+    public String newIngredient(@PathVariable String recipeId, Model model) {
+        // Throws Exception if the recipe id is not found (Verification that the recipe exists)
+        recipeService.findCommandById(Long.valueOf(recipeId));
+
+        model.addAttribute("ingredient", IngredientCommand.builder()
+                // We need to put the recipe id for the POST url form
+                .recipeId(Long.valueOf(recipeId))
+                // We need to initialize the uom
+                .uom(new UnitOfMeasureCommand())
+                .build()
+        );
+        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+
+        return "recipe/ingredient/ingredientform";
     }
 
     @GetMapping("/recipe/{recipeId}/ingredient/{id}/update")

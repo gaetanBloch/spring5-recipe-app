@@ -80,11 +80,22 @@ public class IngredientServiceImpl implements IngredientService {
 
         Recipe savedRecipe = recipeRepository.save(recipe.get());
 
-        return ingredientToIngredientCommand.convert(savedRecipe.getIngredients()
+        Optional<Ingredient> savedIngredient = savedRecipe.getIngredients()
                 .stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Ingredient not found for id = " +
-                        ingredientCommand.getId())));
+                .findFirst();
+
+        // Check by description if it didn't match the id
+        if (!savedIngredient.isPresent()) {
+            savedIngredient = savedRecipe.getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getDescription().equals(ingredientCommand.getDescription()))
+                    .filter(ingredient -> ingredient.getAmount().equals(ingredientCommand.getAmount()))
+                    .filter(ingredient -> ingredient.getUom().getId().equals(ingredientCommand.getUom().getId()))
+                    .findFirst();
+        }
+
+        return ingredientToIngredientCommand.convert(savedIngredient.orElseThrow(() ->
+                new RuntimeException("Ingredient not found for id = " + ingredientCommand.getId())));
     }
 }
