@@ -222,4 +222,49 @@ public class IngredientServiceImplTest {
         // Then
         // RuntimeException thrown
     }
+
+    @Test
+    public void deleteByRecipeIdByIngredientIdTest() {
+        // Given
+        Recipe recipe = new Recipe();
+        recipe.setId(ID);
+        Ingredient ingredient = Ingredient.builder().id(ID2).build();
+        recipe.addIngredient(ingredient);
+        when(recipeRepository.findById(ID)).thenReturn(Optional.of(recipe));
+
+        // When
+        ingredientService.deleteByRecipeIdByIngredientId(ID, ID2);
+
+        // Then
+        verify(recipeRepository).findById(ID);
+        verify(recipeRepository).save(any());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteByRecipeIdByIngredientIdButRecipeNotFoundTest() {
+        // Given
+        when(recipeRepository.findById(ID)).thenReturn(Optional.empty());
+
+        // When
+        ingredientService.deleteByRecipeIdByIngredientId(ID, ID2);
+
+        // Then
+        // RuntimeException thrown
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void deleteByRecipeIdByIngredientIdButIngredientNotFoundTest() {
+        // Given
+        Recipe recipe = new Recipe();
+        recipe.setId(ID);
+        Ingredient ingredient = Ingredient.builder().id(ID2).build();
+        recipe.addIngredient(ingredient);
+        when(recipeRepository.findById(ID)).thenReturn(Optional.of(recipe));
+
+        // When
+        ingredientService.deleteByRecipeIdByIngredientId(ID, ID3);
+
+        // Then
+        // RuntimeException thrown
+    }
 }
