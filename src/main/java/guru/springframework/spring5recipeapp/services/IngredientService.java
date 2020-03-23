@@ -8,4 +8,6 @@ import guru.springframework.spring5recipeapp.commands.IngredientCommand;
  */
 public interface IngredientService {
     IngredientCommand findByRecipeIdByIngredientId(Long recipeId, Long ingredientId);
+
+    IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand);
 }

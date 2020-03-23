@@ -17,8 +17,7 @@ import java.util.Set;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public
-class RecipeServiceImpl implements RecipeService {
+public class RecipeServiceImpl implements RecipeService {
 
     private final RecipeRepository recipeRepository;
     private final RecipeCommandToRecipe recipeCommandToRecipe;
@@ -37,8 +36,8 @@ class RecipeServiceImpl implements RecipeService {
     public Recipe findById(Long id) {
         Optional<Recipe> recipe = recipeRepository.findById(id);
         if (!recipe.isPresent()) {
-            log.error("Recipe not found. id = " + id);
-            throw new RuntimeException("Recipe Not Found!");
+            log.error("Recipe not found for id = " + id);
+            throw new RuntimeException("Recipe not found for id = " + id);
         }
         return recipe.get();
     }

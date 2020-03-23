@@ -2,8 +2,7 @@ package guru.springframework.spring5recipeapp.services;
 
 import com.google.common.collect.ImmutableSet;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
-import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
+import guru.springframework.spring5recipeapp.converters.*;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import org.junit.Before;
@@ -27,14 +26,20 @@ public class RecipeServiceImplTest {
     private RecipeServiceImpl recipeService;
     @Mock
     private RecipeRepository recipeRepository;
-    @Mock
-    private RecipeCommandToRecipe recipeCommandToRecipe;
-    @Mock
-    private RecipeToRecipeCommand recipeToRecipeCommand;
 
     @Before
     public void setUp() {
-        recipeService = new RecipeServiceImpl(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
+        recipeService = new RecipeServiceImpl(
+                recipeRepository,
+                new RecipeCommandToRecipe(
+                        new CategoryCommandToCategory(),
+                        new IngredientCommandToIngredient(new UnitOfMeasureCommandToUnitOfMeasure()),
+                        new NotesCommandToNotes()),
+                new RecipeToRecipeCommand(
+                        new CategoryToCategoryCommand(),
+                        new IngredientToIngredientCommand(new UnitOfMeasureToUnitOfMeasureCommand()),
+                        new NotesToNotesCommand()
+                ));
     }
 
     @Test
@@ -83,9 +88,7 @@ public class RecipeServiceImplTest {
         // Given
         Recipe recipe = Recipe.builder().id(ID).description(DESCRIPTION).build();
         RecipeCommand recipeCommand = RecipeCommand.builder().id(ID).description(DESCRIPTION).build();
-        when(recipeCommandToRecipe.convert(recipeCommand)).thenReturn(recipe);
-        when(recipeRepository.save(recipe)).thenReturn(recipe);
-        when(recipeToRecipeCommand.convert(recipe)).thenReturn(recipeCommand);
+        when(recipeRepository.save(any())).thenReturn(recipe);
 
         // When
         RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(recipeCommand);
@@ -94,9 +97,7 @@ public class RecipeServiceImplTest {
         assertNotNull(savedRecipeCommand);
         assertEquals(ID, savedRecipeCommand.getId());
         assertEquals(DESCRIPTION, savedRecipeCommand.getDescription());
-        verify(recipeCommandToRecipe).convert(recipeCommand);
-        verify(recipeRepository).save(recipe);
-        verify(recipeToRecipeCommand).convert(recipe);
+        verify(recipeRepository).save(any());
     }
 
     @Test(expected = NullPointerException.class)
@@ -113,7 +114,6 @@ public class RecipeServiceImplTest {
         // Given
         Optional<Recipe> recipe = Optional.of(Recipe.builder().id(ID).build());
         when(recipeRepository.findById(ID)).thenReturn(recipe);
-        when(recipeToRecipeCommand.convert(recipe.get())).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
         RecipeCommand commandById = recipeService.findCommandById(ID);
