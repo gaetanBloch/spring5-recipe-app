@@ -41,6 +41,7 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
                 .servings(recipeCommand.getServings())
                 .source(recipeCommand.getSource())
                 .url(recipeCommand.getUrl())
+                .image(recipeCommand.getImage())
                 .notes(notesConverter.convert(recipeCommand.getNotes()))
                 .ingredients(recipeCommand.getIngredients() == null ? new HashSet<>() : recipeCommand
                         .getIngredients()

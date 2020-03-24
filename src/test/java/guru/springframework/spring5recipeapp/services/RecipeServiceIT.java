@@ -2,7 +2,6 @@ package guru.springframework.spring5recipeapp.services;
 
 import guru.springframework.spring5recipeapp.TestUtils;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
@@ -27,8 +26,6 @@ public class RecipeServiceIT {
     private RecipeService recipeService;
     @Autowired
     private RecipeRepository recipeRepository;
-    @Autowired
-    private RecipeCommandToRecipe recipeCommandToRecipe;
     @Autowired
     private RecipeToRecipeCommand recipeToRecipeCommand;
 

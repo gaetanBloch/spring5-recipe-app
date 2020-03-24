@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
@@ -31,6 +32,7 @@ public class UnitOfMeasureRepositoryIT {
         Optional<UnitOfMeasure> unitOfMeasure = unitOfMeasureRepository.findByDescription(teaspoon);
 
         // Then
+        assertTrue(unitOfMeasure.isPresent());
         assertEquals(teaspoon, unitOfMeasure.get().getDescription());
     }
 
@@ -43,6 +45,7 @@ public class UnitOfMeasureRepositoryIT {
         Optional<UnitOfMeasure> unitOfMeasure = unitOfMeasureRepository.findByDescription(cup);
 
         // Then
+        assertTrue(unitOfMeasure.isPresent());
         assertEquals(cup, unitOfMeasure.get().getDescription());
     }
 }

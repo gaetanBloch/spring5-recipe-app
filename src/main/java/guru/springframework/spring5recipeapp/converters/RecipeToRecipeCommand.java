@@ -40,6 +40,7 @@ public class RecipeToRecipeCommand implements Converter<Recipe, RecipeCommand> {
                 .servings(recipe.getServings())
                 .source(recipe.getSource())
                 .url(recipe.getUrl())
+                .image(recipe.getImage())
                 .notes(notesConverter.convert(recipe.getNotes()))
                 .ingredients(recipe
                         .getIngredients()
