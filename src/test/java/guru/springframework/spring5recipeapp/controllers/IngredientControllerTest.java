@@ -35,6 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class IngredientControllerTest {
+    private static final String URL_INGREDIENT_SHOW = URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/show";
+    private static final String URL_INGREDIENTS = URL_RECIPE + "/" + ID + "/ingredients";
+
     @Mock
     private RecipeService recipeService;
     @Mock
@@ -56,7 +59,7 @@ public class IngredientControllerTest {
         when(recipeService.findCommandById(anyLong())).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredients"))
+        mockMvc.perform(get(URL_INGREDIENTS))
 
                 // Then
                 .andExpect(status().isOk())
@@ -72,7 +75,7 @@ public class IngredientControllerTest {
         when(ingredientService.findByRecipeIdByIngredientId(ID, ID2)).thenReturn(new IngredientCommand());
 
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/show"))
+        mockMvc.perform(get(URL_INGREDIENT_SHOW))
 
                 // Then
                 .andExpect(status().isOk())
@@ -135,8 +138,7 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:" + URL_RECIPE +"/" + ID +
-                        "/ingredient/" + ID2 + "/show"));
+                .andExpect(view().name("redirect:" + URL_INGREDIENT_SHOW));
 
         verify(ingredientService).saveIngredientCommand(any());
     }
@@ -148,8 +150,7 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:" + URL_RECIPE +
-                        "/" + ID + "/ingredients"));
+                .andExpect(view().name("redirect:" + URL_INGREDIENTS));
 
         verify(ingredientService).deleteByRecipeIdByIngredientId(ID, ID2);
     }
