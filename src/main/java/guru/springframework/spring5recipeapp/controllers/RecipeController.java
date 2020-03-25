@@ -17,34 +17,39 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 final class RecipeController {
+    static final String VIEWS_RECIPE_SHOW_FORM = "recipe/show";
+    static final String VIEWS_RECIPE_CREATE_OR_UPDATE_FORM = "recipe/recipeform";
+    static final String ATTRIBUTE_RECIPE = "recipe";
+    static final String URL_RECIPE = "/recipe";
+    static final String URL_RECIPE_NEW = URL_RECIPE + "/new";
 
     private final RecipeService recipeService;
 
-    @GetMapping("/recipe/{id}/show")
+    @GetMapping(URL_RECIPE + "/{id}/show")
     public String showRecipe(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findById(Long.valueOf(id)));
-        return "recipe/show";
+        model.addAttribute(ATTRIBUTE_RECIPE, recipeService.findById(Long.valueOf(id)));
+        return VIEWS_RECIPE_SHOW_FORM;
     }
 
-    @GetMapping("/recipe/new")
+    @GetMapping(URL_RECIPE_NEW)
     public String newRecipe(Model model) {
-        model.addAttribute("recipe", new RecipeCommand());
-        return "recipe/recipeform";
+        model.addAttribute(ATTRIBUTE_RECIPE, new RecipeCommand());
+        return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
     }
 
-    @GetMapping("/recipe/{id}/update")
+    @GetMapping(URL_RECIPE + "/{id}/update")
     public String updateRecipe(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
-        return "recipe/recipeform";
+        model.addAttribute(ATTRIBUTE_RECIPE, recipeService.findCommandById(Long.valueOf(id)));
+        return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
     }
 
-    @PostMapping("/recipe")
+    @PostMapping(URL_RECIPE)
     public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
-        return "redirect:/recipe/" + savedCommand.getId() + "/show" ;
+        return "redirect:" + URL_RECIPE + "/" + savedCommand.getId() + "/show";
     }
 
-    @GetMapping("/recipe/{id}/delete")
+    @GetMapping(URL_RECIPE + "/{id}/delete")
     public String deleteRecipe(@PathVariable String id) {
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";

@@ -27,22 +27,24 @@ import java.io.InputStream;
 @Slf4j
 @Controller
 final class ImageController {
+    static final String VIEW_IMAGE_UPLOAD_FORM = "recipe/imageuploadform";
+
     private final RecipeService recipeService;
     private final ImageService imageService;
 
-    @GetMapping("/recipe/{id}/image")
+    @GetMapping(RecipeController.URL_RECIPE + "/{id}/image")
     public String showImageUploadForm(@PathVariable String id, Model model) {
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
-        return "recipe/imageuploadform";
+        model.addAttribute(RecipeController.ATTRIBUTE_RECIPE, recipeService.findCommandById(Long.valueOf(id)));
+        return VIEW_IMAGE_UPLOAD_FORM;
     }
 
-    @PostMapping("/recipe/{id}/image")
+    @PostMapping(RecipeController.URL_RECIPE + "/{id}/image")
     public String uploadImage(@PathVariable String id, @RequestParam("imagefile") MultipartFile file) {
         imageService.saveImageFile(Long.valueOf(id), file);
-        return "redirect:/recipe/" + id + "/show";
+        return "redirect:" + RecipeController.URL_RECIPE + "/" + id + "/show";
     }
 
-    @GetMapping("/recipe/{id}/recipeimage")
+    @GetMapping(RecipeController.URL_RECIPE + "/{id}/recipeimage")
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) {
         RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(id));
 

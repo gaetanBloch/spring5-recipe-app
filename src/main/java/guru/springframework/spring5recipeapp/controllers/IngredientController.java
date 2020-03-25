@@ -22,62 +22,69 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Slf4j
 @Controller
 final class IngredientController {
+    static final String VIEW_INGREDIENT_LIST = "recipe/ingredient/list";
+    static final String VIEW_INGREDIENT_SHOW = "recipe/ingredient/show";
+    static final String VIEW_CREATE_OR_UPDATE_INGREDIENT_FORM = "recipe/ingredient/ingredientform";
+    static final String ATTRIBUTE_INGREDIENT = "ingredient";
+    static final String ATTRIBUTE_UOM_LIST = "uomList";
+
     private final RecipeService recipeService;
     private final IngredientService ingredientService;
     private final UnitOfMeasureService unitOfMeasureService;
 
-    @GetMapping("/recipe/{recipeId}/ingredients")
+    @GetMapping(RecipeController.URL_RECIPE + "/{recipeId}/ingredients")
     public String listIngredients(@PathVariable String recipeId, Model model) {
         log.debug("Getting ingredient list for recipe id = " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(recipeId)));
-        return "recipe/ingredient/list";
+        model.addAttribute(RecipeController.ATTRIBUTE_RECIPE, recipeService.findCommandById(Long.valueOf(recipeId)));
+        return VIEW_INGREDIENT_LIST;
     }
 
-    @GetMapping("/recipe/{recipeId}/ingredient/{id}/show")
+    @GetMapping(RecipeController.URL_RECIPE + "/{recipeId}/ingredient/{id}/show")
     public String showIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdByIngredientId(
+        model.addAttribute(ATTRIBUTE_INGREDIENT, ingredientService.findByRecipeIdByIngredientId(
                 Long.valueOf(recipeId), Long.valueOf(id)
         ));
-        return "recipe/ingredient/show";
+        return VIEW_INGREDIENT_SHOW;
     }
 
-    @GetMapping("/recipe/{recipeId}/ingredient/new")
+    @GetMapping(RecipeController.URL_RECIPE + "/{recipeId}/ingredient/new")
     public String newIngredient(@PathVariable String recipeId, Model model) {
         // Throws Exception if the recipe id is not found (Verification that the recipe exists)
         recipeService.findCommandById(Long.valueOf(recipeId));
 
-        model.addAttribute("ingredient", IngredientCommand.builder()
+        model.addAttribute(ATTRIBUTE_INGREDIENT, IngredientCommand.builder()
                 // We need to put the recipe id for the POST url form
                 .recipeId(Long.valueOf(recipeId))
                 // We need to initialize the uom
                 .uom(new UnitOfMeasureCommand())
                 .build()
         );
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+        model.addAttribute(ATTRIBUTE_UOM_LIST, unitOfMeasureService.listAllUoms());
 
-        return "recipe/ingredient/ingredientform";
+        return VIEW_CREATE_OR_UPDATE_INGREDIENT_FORM;
     }
 
-    @GetMapping("/recipe/{recipeId}/ingredient/{id}/update")
+    @GetMapping(RecipeController.URL_RECIPE + "/{recipeId}/ingredient/{id}/update")
     public String updateIngredient(@PathVariable String recipeId, @PathVariable String id, Model model) {
-        model.addAttribute("ingredient", ingredientService.findByRecipeIdByIngredientId(
+        model.addAttribute(ATTRIBUTE_INGREDIENT, ingredientService.findByRecipeIdByIngredientId(
                 Long.valueOf(recipeId), Long.valueOf(id)
         ));
-        model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
-        return "recipe/ingredient/ingredientform";
+        model.addAttribute(ATTRIBUTE_UOM_LIST, unitOfMeasureService.listAllUoms());
+        return VIEW_CREATE_OR_UPDATE_INGREDIENT_FORM;
     }
 
-    @PostMapping("/recipe/{recipeId}/ingredient")
+    @PostMapping(RecipeController.URL_RECIPE + "/{recipeId}/ingredient")
     public String saveOrUpdate(@ModelAttribute IngredientCommand command) {
         IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
         log.debug("Saved recipe id = " + savedCommand.getRecipeId());
         log.debug("Saved ingredient id = " + savedCommand.getId());
-        return "redirect:/recipe/" + savedCommand.getRecipeId() + "/ingredient/" + savedCommand.getId() + "/show";
+        return "redirect:" + RecipeController.URL_RECIPE + "/" + savedCommand.getRecipeId() +
+                "/ingredient/" + savedCommand.getId() + "/show";
     }
 
-    @GetMapping("/recipe/{recipeId}/ingredient/{id}/delete")
+    @GetMapping(RecipeController.URL_RECIPE + "/{recipeId}/ingredient/{id}/delete")
     public String deleteIngredient(@PathVariable String recipeId, @PathVariable String id) {
         ingredientService.deleteByRecipeIdByIngredientId(Long.valueOf(recipeId), Long.valueOf(id));
-        return "redirect:/recipe/" + recipeId + "/ingredients";
+        return "redirect:" + RecipeController.URL_RECIPE + "/" + recipeId + "/ingredients";
     }
 }

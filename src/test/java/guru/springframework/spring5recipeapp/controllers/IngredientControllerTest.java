@@ -18,6 +18,9 @@ import java.util.HashSet;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
 import static guru.springframework.spring5recipeapp.TestUtils.ID2;
+import static guru.springframework.spring5recipeapp.controllers.IngredientController.*;
+import static guru.springframework.spring5recipeapp.controllers.RecipeController.ATTRIBUTE_RECIPE;
+import static guru.springframework.spring5recipeapp.controllers.RecipeController.URL_RECIPE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -53,12 +56,12 @@ public class IngredientControllerTest {
         when(recipeService.findCommandById(anyLong())).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get("/recipe/" + ID + "/ingredients"))
+        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredients"))
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/ingredient/list"))
-                .andExpect(model().attributeExists("recipe"));
+                .andExpect(view().name(VIEW_INGREDIENT_LIST))
+                .andExpect(model().attributeExists(ATTRIBUTE_RECIPE));
 
         verify(recipeService).findCommandById(ID);
     }
@@ -69,12 +72,12 @@ public class IngredientControllerTest {
         when(ingredientService.findByRecipeIdByIngredientId(ID, ID2)).thenReturn(new IngredientCommand());
 
         // When
-        mockMvc.perform(get("/recipe/" + ID + "/ingredient/" + ID2 + "/show"))
+        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/show"))
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/ingredient/show"))
-                .andExpect(model().attributeExists("ingredient"));
+                .andExpect(view().name(VIEW_INGREDIENT_SHOW))
+                .andExpect(model().attributeExists(ATTRIBUTE_INGREDIENT));
 
         verify(ingredientService).findByRecipeIdByIngredientId(ID, ID2);
     }
@@ -86,13 +89,13 @@ public class IngredientControllerTest {
         when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
 
         // When
-        mockMvc.perform(get("/recipe/" + ID + "/ingredient/new"))
+        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/new"))
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/ingredient/ingredientform"))
-                .andExpect(model().attributeExists("ingredient"))
-                .andExpect(model().attributeExists("uomList"));
+                .andExpect(view().name(VIEW_CREATE_OR_UPDATE_INGREDIENT_FORM))
+                .andExpect(model().attributeExists(ATTRIBUTE_INGREDIENT))
+                .andExpect(model().attributeExists(ATTRIBUTE_UOM_LIST));
 
         verify(recipeService).findCommandById(ID);
         verify(unitOfMeasureService).listAllUoms();
@@ -105,13 +108,13 @@ public class IngredientControllerTest {
         when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
 
         // When
-        mockMvc.perform(get("/recipe/" + ID + "/ingredient/" + ID2 + "/update"))
+        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/update"))
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipe/ingredient/ingredientform"))
-                .andExpect(model().attributeExists("ingredient"))
-                .andExpect(model().attributeExists("uomList"));
+                .andExpect(view().name(VIEW_CREATE_OR_UPDATE_INGREDIENT_FORM))
+                .andExpect(model().attributeExists(ATTRIBUTE_INGREDIENT))
+                .andExpect(model().attributeExists(ATTRIBUTE_UOM_LIST));
 
         verify(ingredientService).findByRecipeIdByIngredientId(ID, ID2);
         verify(unitOfMeasureService).listAllUoms();
@@ -124,7 +127,7 @@ public class IngredientControllerTest {
                 .thenReturn(IngredientCommand.builder().id(ID2).recipeId(ID).build());
 
         // When
-        mockMvc.perform(post("/recipe/" + ID + "/ingredient")
+        mockMvc.perform(post(URL_RECIPE + "/" + ID + "/ingredient")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
                 .param("description", "description")
@@ -132,7 +135,8 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/" + ID + "/ingredient/" + ID2 + "/show"));
+                .andExpect(view().name("redirect:" + URL_RECIPE +"/" + ID +
+                        "/ingredient/" + ID2 + "/show"));
 
         verify(ingredientService).saveIngredientCommand(any());
     }
@@ -140,11 +144,12 @@ public class IngredientControllerTest {
     @Test
     public void deleteIngredientTest() throws Exception {
         // When
-        mockMvc.perform(get("/recipe/" + ID + "/ingredient/" + ID2 + "/delete"))
+        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/delete"))
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/recipe/" + ID + "/ingredients"));
+                .andExpect(view().name("redirect:" + URL_RECIPE +
+                        "/" + ID + "/ingredients"));
 
         verify(ingredientService).deleteByRecipeIdByIngredientId(ID, ID2);
     }

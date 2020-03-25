@@ -14,6 +14,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
+import static guru.springframework.spring5recipeapp.controllers.RecipeController.ATTRIBUTE_RECIPE;
+import static guru.springframework.spring5recipeapp.controllers.RecipeController.URL_RECIPE;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -47,12 +49,12 @@ public class ImageControllerTest {
         when(recipeService.findCommandById(ID)).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get("/recipe/" + ID + "/image"))
+        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/image"))
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("recipe"))
-                .andExpect(view().name("recipe/imageuploadform"));
+                .andExpect(model().attributeExists(ATTRIBUTE_RECIPE))
+                .andExpect(view().name(ImageController.VIEW_IMAGE_UPLOAD_FORM));
 
         verify(recipeService).findCommandById(ID);
     }
@@ -64,12 +66,12 @@ public class ImageControllerTest {
                 "imagefile", "test.txt", "text/plain", "text".getBytes());
 
         // When
-        mockMvc.perform(multipart("/recipe/" + ID + "/image").file(multipartFile))
+        mockMvc.perform(multipart(URL_RECIPE + "/" + ID + "/image").file(multipartFile))
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(header().string("location", "/recipe/" + ID + "/show"))
-                .andExpect(view().name("redirect:/recipe/" + ID + "/show"));
+                .andExpect(header().string("location", URL_RECIPE + "/" + ID + "/show"))
+                .andExpect(view().name("redirect:" + URL_RECIPE + "/" + ID + "/show"));
 
         verify(imageService).saveImageFile(eq(ID), any());
     }
@@ -85,7 +87,7 @@ public class ImageControllerTest {
         when(recipeService.findCommandById(ID)).thenReturn(RecipeCommand.builder().id(ID).image(bytes).build());
 
         // When
-        MockHttpServletResponse response = mockMvc.perform(get("/recipe/" + ID + "/recipeimage"))
+        MockHttpServletResponse response = mockMvc.perform(get(URL_RECIPE + "/" + ID + "/recipeimage"))
 
                 // Then
                 .andExpect(status().isOk())
