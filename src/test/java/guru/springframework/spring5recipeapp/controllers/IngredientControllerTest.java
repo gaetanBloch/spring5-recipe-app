@@ -1,5 +1,6 @@
 package guru.springframework.spring5recipeapp.controllers;
 
+import com.google.common.collect.ImmutableMap;
 import guru.springframework.spring5recipeapp.commands.IngredientCommand;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.services.IngredientService;
@@ -13,14 +14,16 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.UriTemplate;
 
+import java.net.URI;
 import java.util.HashSet;
+import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
 import static guru.springframework.spring5recipeapp.TestUtils.ID2;
 import static guru.springframework.spring5recipeapp.controllers.IngredientController.*;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.ATTRIBUTE_RECIPE;
-import static guru.springframework.spring5recipeapp.controllers.RecipeController.URL_RECIPE;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -35,8 +38,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class IngredientControllerTest {
-    private static final String URL_INGREDIENT_SHOW = URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/show";
-    private static final String URL_INGREDIENTS = URL_RECIPE + "/" + ID + "/ingredients";
+    private static final Map<String, String> URI_VARIABLES = ImmutableMap.of(
+            "recipeId", ID.toString(),
+            "id", ID2.toString()
+    );
+    private static final URI URI_INGREDIENT = new UriTemplate(URL_INGREDIENT).expand(URI_VARIABLES);
+    private static final URI URI_INGREDIENTS = new UriTemplate(URL_INGREDIENTS).expand(URI_VARIABLES);
+    private static final URI URI_INGREDIENT_SHOW = new UriTemplate(URL_INGREDIENT_SHOW).expand(URI_VARIABLES);
+    private static final URI URI_INGREDIENT_NEW = new UriTemplate(URL_INGREDIENT_NEW).expand(URI_VARIABLES);
+    private static final URI URI_INGREDIENT_UPDATE = new UriTemplate(URL_INGREDIENT_UPDATE).expand(URI_VARIABLES);
+    private static final URI URI_INGREDIENT_DELETE = new UriTemplate(URL_INGREDIENT_DELETE).expand(URI_VARIABLES);
 
     @Mock
     private RecipeService recipeService;
@@ -59,7 +70,7 @@ public class IngredientControllerTest {
         when(recipeService.findCommandById(anyLong())).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get(URL_INGREDIENTS))
+        mockMvc.perform(get(URI_INGREDIENTS))
 
                 // Then
                 .andExpect(status().isOk())
@@ -75,7 +86,7 @@ public class IngredientControllerTest {
         when(ingredientService.findByRecipeIdByIngredientId(ID, ID2)).thenReturn(new IngredientCommand());
 
         // When
-        mockMvc.perform(get(URL_INGREDIENT_SHOW))
+        mockMvc.perform(get(URI_INGREDIENT_SHOW))
 
                 // Then
                 .andExpect(status().isOk())
@@ -92,7 +103,7 @@ public class IngredientControllerTest {
         when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
 
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/new"))
+        mockMvc.perform(get(URI_INGREDIENT_NEW))
 
                 // Then
                 .andExpect(status().isOk())
@@ -111,7 +122,7 @@ public class IngredientControllerTest {
         when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
 
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/update"))
+        mockMvc.perform(get(URI_INGREDIENT_UPDATE))
 
                 // Then
                 .andExpect(status().isOk())
@@ -130,7 +141,7 @@ public class IngredientControllerTest {
                 .thenReturn(IngredientCommand.builder().id(ID2).recipeId(ID).build());
 
         // When
-        mockMvc.perform(post(URL_RECIPE + "/" + ID + "/ingredient")
+        mockMvc.perform(post(URI_INGREDIENT)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "1")
                 .param("description", "description")
@@ -138,7 +149,7 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:" + URL_INGREDIENT_SHOW));
+                .andExpect(view().name("redirect:" + URI_INGREDIENT_SHOW));
 
         verify(ingredientService).saveIngredientCommand(any());
     }
@@ -146,11 +157,11 @@ public class IngredientControllerTest {
     @Test
     public void deleteIngredientTest() throws Exception {
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/ingredient/" + ID2 + "/delete"))
+        mockMvc.perform(get(URI_INGREDIENT_DELETE))
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:" + URL_INGREDIENTS));
+                .andExpect(view().name("redirect:" + URI_INGREDIENTS));
 
         verify(ingredientService).deleteByRecipeIdByIngredientId(ID, ID2);
     }
