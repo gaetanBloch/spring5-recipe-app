@@ -1,5 +1,6 @@
 package guru.springframework.spring5recipeapp.controllers;
 
+import com.google.common.collect.ImmutableMap;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.services.ImageService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
@@ -12,8 +13,14 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.UriTemplate;
+
+import java.net.URI;
+import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
+import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_IMAGE;
+import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_RECIPE_IMAGE;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.ATTRIBUTE_RECIPE;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.URL_RECIPE;
 import static org.junit.Assert.assertEquals;
@@ -31,6 +38,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ImageControllerTest {
+    private static final Map<String, String> URI_VARIABLES = ImmutableMap.of("id", ID.toString());
+    private static final URI URI_IMAGE = new UriTemplate(URL_IMAGE).expand(URI_VARIABLES);
+    private static final URI URI_RECIPE_IMAGE = new UriTemplate(URL_RECIPE_IMAGE).expand(URI_VARIABLES);
+
     @Mock
     private RecipeService recipeService;
     @Mock
@@ -49,7 +60,7 @@ public class ImageControllerTest {
         when(recipeService.findCommandById(ID)).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/image"))
+        mockMvc.perform(get(URI_IMAGE))
 
                 // Then
                 .andExpect(status().isOk())
@@ -66,7 +77,7 @@ public class ImageControllerTest {
                 "imagefile", "test.txt", "text/plain", "text".getBytes());
 
         // When
-        mockMvc.perform(multipart(URL_RECIPE + "/" + ID + "/image").file(multipartFile))
+        mockMvc.perform(multipart(URI_IMAGE).file(multipartFile))
 
                 // Then
                 .andExpect(status().is3xxRedirection())
@@ -87,7 +98,7 @@ public class ImageControllerTest {
         when(recipeService.findCommandById(ID)).thenReturn(RecipeCommand.builder().id(ID).image(bytes).build());
 
         // When
-        MockHttpServletResponse response = mockMvc.perform(get(URL_RECIPE + "/" + ID + "/recipeimage"))
+        MockHttpServletResponse response = mockMvc.perform(get(URI_RECIPE_IMAGE))
 
                 // Then
                 .andExpect(status().isOk())

@@ -19,6 +19,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static guru.springframework.spring5recipeapp.controllers.RecipeController.URL_RECIPE;
+
 /**
  * @author Gaetan Bloch
  * Created on 24/03/2020
@@ -28,23 +30,25 @@ import java.io.InputStream;
 @Controller
 final class ImageController {
     static final String VIEW_IMAGE_UPLOAD_FORM = "recipe/imageuploadform";
+    static final String URL_IMAGE = URL_RECIPE + "/{id}/image";
+    static final String URL_RECIPE_IMAGE = URL_RECIPE + "/{id}/recipeimage";
 
     private final RecipeService recipeService;
     private final ImageService imageService;
 
-    @GetMapping(RecipeController.URL_RECIPE + "/{id}/image")
+    @GetMapping(URL_IMAGE)
     public String showImageUploadForm(@PathVariable String id, Model model) {
         model.addAttribute(RecipeController.ATTRIBUTE_RECIPE, recipeService.findCommandById(Long.valueOf(id)));
         return VIEW_IMAGE_UPLOAD_FORM;
     }
 
-    @PostMapping(RecipeController.URL_RECIPE + "/{id}/image")
+    @PostMapping(URL_IMAGE)
     public String uploadImage(@PathVariable String id, @RequestParam("imagefile") MultipartFile file) {
         imageService.saveImageFile(Long.valueOf(id), file);
-        return "redirect:" + RecipeController.URL_RECIPE + "/" + id + "/show";
+        return "redirect:" + URL_RECIPE + "/" + id + "/show";
     }
 
-    @GetMapping(RecipeController.URL_RECIPE + "/{id}/recipeimage")
+    @GetMapping(URL_RECIPE_IMAGE)
     public void renderImageFromDB(@PathVariable String id, HttpServletResponse response) {
         RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(id));
 
