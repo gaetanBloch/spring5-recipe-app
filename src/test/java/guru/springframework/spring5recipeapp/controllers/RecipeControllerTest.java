@@ -1,5 +1,6 @@
 package guru.springframework.spring5recipeapp.controllers;
 
+import com.google.common.collect.ImmutableMap;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.services.RecipeService;
@@ -11,6 +12,10 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.util.UriTemplate;
+
+import java.net.URI;
+import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.*;
@@ -26,6 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeControllerTest {
+    private static final Map<String, String> URI_VARIABLES = ImmutableMap.of("id", ID.toString());
+    private static final URI URI_RECIPE_SHOW = new UriTemplate(URL_RECIPE_SHOW).expand(URI_VARIABLES);
+    private static final URI URI_RECIPE_UPDATE = new UriTemplate(URL_RECIPE_UPDATE).expand(URI_VARIABLES);
+    private static final URI URI_RECIPE_DELETE = new UriTemplate(URL_RECIPE_DELETE).expand(URI_VARIABLES);
+
     private MockMvc mockMvc;
     @Mock
     private RecipeService recipeService;
@@ -41,7 +51,7 @@ public class RecipeControllerTest {
         when(recipeService.findById(ID)).thenReturn(Recipe.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/show"))
+        mockMvc.perform(get(URI_RECIPE_SHOW))
 
                 // Then
                 .andExpect(status().isOk())
@@ -52,7 +62,7 @@ public class RecipeControllerTest {
     @Test
     public void getNewRecipeFormTest() throws Exception {
         // When
-        mockMvc.perform(get(RecipeController.URL_RECIPE_NEW))
+        mockMvc.perform(get(URL_RECIPE_NEW))
 
                 // Then
                 .andExpect(status().isOk())
@@ -74,7 +84,7 @@ public class RecipeControllerTest {
 
                 // Then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:" + URL_RECIPE + "/" + ID + "/show"));
+                .andExpect(view().name("redirect:" + URI_RECIPE_SHOW));
     }
 
     @Test
@@ -83,7 +93,7 @@ public class RecipeControllerTest {
         when(recipeService.findCommandById(ID)).thenReturn(RecipeCommand.builder().id(ID).build());
 
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/update"))
+        mockMvc.perform(get(URI_RECIPE_UPDATE))
 
                 // Then
                 .andExpect(status().isOk())
@@ -94,7 +104,7 @@ public class RecipeControllerTest {
     @Test
     public void deleteRecipeTest() throws Exception {
         // When
-        mockMvc.perform(get(URL_RECIPE + "/" + ID + "/delete"))
+        mockMvc.perform(get(URI_RECIPE_DELETE))
 
                 // Then
                 .andExpect(status().is3xxRedirection())

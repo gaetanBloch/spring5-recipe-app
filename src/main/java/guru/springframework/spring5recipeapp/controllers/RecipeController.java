@@ -22,10 +22,13 @@ final class RecipeController {
     static final String ATTRIBUTE_RECIPE = "recipe";
     static final String URL_RECIPE = "/recipe";
     static final String URL_RECIPE_NEW = URL_RECIPE + "/new";
+    static final String URL_RECIPE_SHOW = URL_RECIPE + "/{id}/show";
+    static final String URL_RECIPE_UPDATE = URL_RECIPE + "/{id}/update";
+    static final String URL_RECIPE_DELETE = URL_RECIPE + "/{id}/delete";
 
     private final RecipeService recipeService;
 
-    @GetMapping(URL_RECIPE + "/{id}/show")
+    @GetMapping(URL_RECIPE_SHOW)
     public String showRecipe(@PathVariable String id, Model model) {
         model.addAttribute(ATTRIBUTE_RECIPE, recipeService.findById(Long.valueOf(id)));
         return VIEWS_RECIPE_SHOW_FORM;
@@ -37,7 +40,7 @@ final class RecipeController {
         return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
     }
 
-    @GetMapping(URL_RECIPE + "/{id}/update")
+    @GetMapping(URL_RECIPE_UPDATE)
     public String updateRecipe(@PathVariable String id, Model model) {
         model.addAttribute(ATTRIBUTE_RECIPE, recipeService.findCommandById(Long.valueOf(id)));
         return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
@@ -49,7 +52,7 @@ final class RecipeController {
         return "redirect:" + URL_RECIPE + "/" + savedCommand.getId() + "/show";
     }
 
-    @GetMapping(URL_RECIPE + "/{id}/delete")
+    @GetMapping(URL_RECIPE_DELETE)
     public String deleteRecipe(@PathVariable String id) {
         recipeService.deleteById(Long.valueOf(id));
         return "redirect:/";
