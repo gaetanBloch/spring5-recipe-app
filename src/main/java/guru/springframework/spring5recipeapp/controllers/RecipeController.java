@@ -1,6 +1,7 @@
 package guru.springframework.spring5recipeapp.controllers;
 
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
+import guru.springframework.spring5recipeapp.services.CategoryService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ final class RecipeController {
     static final String VIEWS_RECIPE_SHOW_FORM = "recipe/show";
     static final String VIEWS_RECIPE_CREATE_OR_UPDATE_FORM = "recipe/recipeform";
     static final String ATTRIBUTE_RECIPE = "recipe";
+    static final String ATTRIBUTE_CATEGORIES = "categories";
     static final String URL_RECIPE = "/recipe";
     static final String URL_RECIPE_NEW = URL_RECIPE + "/new";
     static final String URL_RECIPE_SHOW = URL_RECIPE + "/{id}/show";
@@ -27,6 +29,7 @@ final class RecipeController {
     static final String URL_RECIPE_DELETE = URL_RECIPE + "/{id}/delete";
 
     private final RecipeService recipeService;
+    private final CategoryService categoryService;
 
     @GetMapping(URL_RECIPE_SHOW)
     public String showRecipe(@PathVariable String id, Model model) {
@@ -37,12 +40,14 @@ final class RecipeController {
     @GetMapping(URL_RECIPE_NEW)
     public String newRecipe(Model model) {
         model.addAttribute(ATTRIBUTE_RECIPE, new RecipeCommand());
+        model.addAttribute(ATTRIBUTE_CATEGORIES, categoryService.findAll());
         return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
     }
 
     @GetMapping(URL_RECIPE_UPDATE)
     public String updateRecipe(@PathVariable String id, Model model) {
         model.addAttribute(ATTRIBUTE_RECIPE, recipeService.findCommandById(Long.valueOf(id)));
+        model.addAttribute(ATTRIBUTE_CATEGORIES, categoryService.findAll());
         return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
     }
 

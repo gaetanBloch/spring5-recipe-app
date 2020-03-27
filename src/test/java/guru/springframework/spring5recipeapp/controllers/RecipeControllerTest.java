@@ -3,6 +3,7 @@ package guru.springframework.spring5recipeapp.controllers;
 import com.google.common.collect.ImmutableMap;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.services.CategoryService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,10 +40,12 @@ public class RecipeControllerTest {
     private MockMvc mockMvc;
     @Mock
     private RecipeService recipeService;
+    @Mock
+    private CategoryService categoryService;
 
     @Before
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new RecipeController(recipeService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new RecipeController(recipeService, categoryService)).build();
     }
 
     @Test

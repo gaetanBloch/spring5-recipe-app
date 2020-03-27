@@ -39,17 +39,14 @@
                                     <label>Categories:</label>
                                 </div>
                                 <div class="col-md-9 form-group">
-                                    <div class="radio">
-                                        <label>
-                                            <input type="checkbox" value=""/>
-                                            Cat 1
-                                        </label>
+                                    <div th:each="categorie : ${categories}">
+                                        <input type="checkbox" th:field="*{categories}" th:value="${categorie.id}"/>
+                                        <label th:for="${#ids.prev('categories')}" th:text="${categorie.description}">
+                                            cat 1</label>
                                     </div>
-                                    <div class="radio" th:remove="all">
-                                        <label>
-                                            <input type="checkbox" value=""/>
-                                            Cat 2
-                                        </label>
+                                    <div th:remove="all">
+                                        <label>Cat 2</label>
+                                        <input type="checkbox" value=""/>
                                     </div>
                                 </div>
                             </div>
@@ -71,11 +68,6 @@
                                                 th:text="${difficultyValue.name()}">
                                             val
                                         </option>
-                                    </select>
-                                    <select class="form-control" th:remove="all">
-                                        <option>Easy</option>
-                                        <option>Medium</option>
-                                        <option>Hard</option>
                                     </select>
                                 </div>
                             </div>
