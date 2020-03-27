@@ -1,6 +1,7 @@
 package guru.springframework.spring5recipeapp.services;
 
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +53,7 @@ public class ImageServiceImplTest {
         assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void saveImageFileRecipeNotFoundTest() {
         // Given
         MultipartFile multipartFile = new MockMultipartFile(
@@ -63,6 +64,6 @@ public class ImageServiceImplTest {
         imageService.saveImageFile(ID, multipartFile);
 
         // Then
-        // Throws RuntimeException
+        // Throws NotFoundException
     }
 }

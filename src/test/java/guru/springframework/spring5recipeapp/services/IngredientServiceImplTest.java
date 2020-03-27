@@ -9,6 +9,7 @@ import guru.springframework.spring5recipeapp.converters.UnitOfMeasureToUnitOfMea
 import guru.springframework.spring5recipeapp.domain.Ingredient;
 import guru.springframework.spring5recipeapp.domain.Recipe;
 import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
 import org.junit.Before;
@@ -68,7 +69,7 @@ public class IngredientServiceImplTest {
         verify(recipeRepository).findById(ID);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void findByRecipeIdByIngredientIdButRecipeNotFoundTest() {
         // Given
         when(recipeRepository.findById(ID)).thenReturn(Optional.empty());
@@ -77,10 +78,10 @@ public class IngredientServiceImplTest {
         ingredientService.findByRecipeIdByIngredientId(ID, ID3);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void findByRecipeIdByIngredientIdButIngredientNotFoundTest() {
         // Given
         Optional<Recipe> recipe = Optional.of(Recipe.builder().id(ID).build());
@@ -90,7 +91,7 @@ public class IngredientServiceImplTest {
         ingredientService.findByRecipeIdByIngredientId(ID, ID3);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 
     @Test
@@ -147,7 +148,7 @@ public class IngredientServiceImplTest {
         verify(recipeRepository).save(any());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void createRecipeIngredientButRecipeNotFoundTest() {
         // Given
         IngredientCommand ingredientCommand = IngredientCommand.builder().recipeId(ID2).build();
@@ -157,10 +158,10 @@ public class IngredientServiceImplTest {
         ingredientService.saveIngredientCommand(ingredientCommand);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void createRecipeIngredientButIngredientNotFound() {
         // Given
         IngredientCommand ingredientCommand = IngredientCommand.builder().id(ID3).recipeId(ID2).build();
@@ -171,7 +172,7 @@ public class IngredientServiceImplTest {
         ingredientService.saveIngredientCommand(ingredientCommand);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 
     @Test
@@ -203,7 +204,7 @@ public class IngredientServiceImplTest {
         verify(unitOfMeasureRepository).findById(ID);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void updateRecipeIngredientButUOMNotFoundTest() {
         // Given
         IngredientCommand ingredientCommand = IngredientCommand.builder()
@@ -220,7 +221,7 @@ public class IngredientServiceImplTest {
         ingredientService.saveIngredientCommand(ingredientCommand);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 
     @Test
@@ -240,7 +241,7 @@ public class IngredientServiceImplTest {
         verify(recipeRepository).save(any());
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void deleteByRecipeIdByIngredientIdButRecipeNotFoundTest() {
         // Given
         when(recipeRepository.findById(ID)).thenReturn(Optional.empty());
@@ -249,10 +250,10 @@ public class IngredientServiceImplTest {
         ingredientService.deleteByRecipeIdByIngredientId(ID, ID2);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void deleteByRecipeIdByIngredientIdButIngredientNotFoundTest() {
         // Given
         Recipe recipe = new Recipe();
@@ -265,6 +266,6 @@ public class IngredientServiceImplTest {
         ingredientService.deleteByRecipeIdByIngredientId(ID, ID3);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 }

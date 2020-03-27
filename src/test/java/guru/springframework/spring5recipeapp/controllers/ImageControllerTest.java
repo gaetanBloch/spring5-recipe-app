@@ -2,6 +2,7 @@ package guru.springframework.spring5recipeapp.controllers;
 
 import com.google.common.collect.ImmutableMap;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.services.ImageService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.Before;
@@ -26,8 +27,7 @@ import static guru.springframework.spring5recipeapp.controllers.RecipeController
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -85,6 +85,20 @@ public class ImageControllerTest {
                 .andExpect(view().name("redirect:" + URL_RECIPE + "/" + ID + "/show"));
 
         verify(imageService).saveImageFile(eq(ID), any());
+    }
+
+    @Test
+    public void uploadImageNoRecipeFoundTest() throws Exception {
+        // Given
+        doThrow(NotFoundException.class).when(imageService).saveImageFile(eq(ID), any());
+        MockMultipartFile multipartFile = new MockMultipartFile(
+                "imagefile", "test.txt", "text/plain", "text".getBytes());
+
+        // When
+        mockMvc.perform(multipart(URI_IMAGE).file(multipartFile))
+
+                // Then
+                .andExpect(status().isNotFound());
     }
 
     @Test

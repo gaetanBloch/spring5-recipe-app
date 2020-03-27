@@ -3,6 +3,7 @@ package guru.springframework.spring5recipeapp.controllers;
 import com.google.common.collect.ImmutableMap;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.services.CategoryService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import org.junit.Before;
@@ -60,6 +61,18 @@ public class RecipeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name(VIEWS_RECIPE_SHOW_FORM))
                 .andExpect(model().attributeExists(ATTRIBUTE_RECIPE));
+    }
+
+    @Test
+    public void getRecipeNotFoundTest() throws Exception {
+        // Given
+        when(recipeService.findById(ID)).thenThrow(NotFoundException.class);
+
+        // When
+        mockMvc.perform(get(URI_RECIPE_SHOW))
+
+                // Then
+                .andExpect(status().isNotFound());
     }
 
     @Test

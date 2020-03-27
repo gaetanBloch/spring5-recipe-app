@@ -5,6 +5,7 @@ import guru.springframework.spring5recipeapp.converters.IngredientCommandToIngre
 import guru.springframework.spring5recipeapp.converters.IngredientToIngredientCommand;
 import guru.springframework.spring5recipeapp.domain.Ingredient;
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (!recipe.isPresent()) {
             log.error("Recipe not found for id = " + recipeId);
-            throw new RuntimeException("Recipe not found for id = " + recipeId);
+            throw new NotFoundException("Recipe not found for id = " + recipeId);
         }
 
         Optional<IngredientCommand> ingredientCommand = recipe.get().getIngredients().stream()
@@ -44,7 +45,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (!ingredientCommand.isPresent()) {
             log.error("Ingredient not found for id = " + ingredientId);
-            throw new RuntimeException("Ingredient not found for id = " + ingredientId);
+            throw new NotFoundException("Ingredient not found for id = " + ingredientId);
         }
 
         return ingredientCommand.get();
@@ -57,7 +58,7 @@ public class IngredientServiceImpl implements IngredientService {
 
         if (!recipe.isPresent()) {
             log.error("Recipe not found for id = " + ingredientCommand.getRecipeId());
-            throw new RuntimeException("Recipe not found for id = " + ingredientCommand.getRecipeId());
+            throw new NotFoundException("Recipe not found for id = " + ingredientCommand.getRecipeId());
         }
 
         Optional<Ingredient> ingredientOptional = recipe.get().getIngredients()
@@ -71,7 +72,7 @@ public class IngredientServiceImpl implements IngredientService {
             ingredientOptional.get().setAmount(ingredientCommand.getAmount());
             ingredientOptional.get().setUom(unitOfMeasureRepository
                     .findById(ingredientCommand.getUom().getId())
-                    .orElseThrow(() -> new RuntimeException("Unit of measure not found for id = " +
+                    .orElseThrow(() -> new NotFoundException("Unit of measure not found for id = " +
                             ingredientCommand.getUom().getId())));
         } else {
             // Create new recipe's ingredient case
@@ -96,7 +97,7 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         return ingredientToIngredientCommand.convert(savedIngredient.orElseThrow(() ->
-                new RuntimeException("Ingredient not found for id = " + ingredientCommand.getId())));
+                new NotFoundException("Ingredient not found for id = " + ingredientCommand.getId())));
     }
 
     @Override
@@ -121,11 +122,11 @@ public class IngredientServiceImpl implements IngredientService {
                 recipeRepository.save(recipe.get());
             } else {
                 log.error("Ingredient not found for id = " + ingredientId);
-                throw new RuntimeException("Ingredient not found for id = " + ingredientId);
+                throw new NotFoundException("Ingredient not found for id = " + ingredientId);
             }
         } else {
             log.error("Recipe not found for id = " + recipeId);
-            throw new RuntimeException("Recipe not found for id = " + recipeId);
+            throw new NotFoundException("Recipe not found for id = " + recipeId);
         }
     }
 }

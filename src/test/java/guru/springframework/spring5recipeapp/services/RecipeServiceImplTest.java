@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.converters.*;
 import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -71,7 +72,7 @@ public class RecipeServiceImplTest {
         verify(recipeRepository, never()).findAll();
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = NotFoundException.class)
     public void getRecipeByIdNotFoundTest() {
         // Given
         when(recipeRepository.findById(ID)).thenReturn(Optional.empty());
@@ -80,7 +81,7 @@ public class RecipeServiceImplTest {
         recipeService.findById(ID);
 
         // Then
-        // RuntimeException thrown
+        // NotFoundException thrown
     }
 
     @Test

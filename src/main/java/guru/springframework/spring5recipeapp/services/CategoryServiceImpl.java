@@ -3,6 +3,7 @@ package guru.springframework.spring5recipeapp.services;
 import guru.springframework.spring5recipeapp.commands.CategoryCommand;
 import guru.springframework.spring5recipeapp.converters.CategoryToCategoryCommand;
 import guru.springframework.spring5recipeapp.domain.Category;
+import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5recipeapp.repositories.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> category = categoryRepository.findById(id);
         if (!category.isPresent()) {
             log.error("No category found for id = " + id);
-            throw new RuntimeException("No category found for id = " + id);
+            throw new NotFoundException("No category found for id = " + id);
         }
         return categoryToCategoryCommand.convert(category.get());
     }
