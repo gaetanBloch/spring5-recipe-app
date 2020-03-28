@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
+import static guru.springframework.spring5recipeapp.controllers.AbstractController.ATTRIBUTE_EXCEPTION;
 import static guru.springframework.spring5recipeapp.controllers.AbstractController.VIEW_404_NOT_FOUND;
 import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_IMAGE;
 import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_RECIPE_IMAGE;
@@ -100,7 +101,8 @@ public class ImageControllerTest {
 
                 // Then
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(VIEW_404_NOT_FOUND));
+                .andExpect(view().name(VIEW_404_NOT_FOUND))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
     }
 
     @Test

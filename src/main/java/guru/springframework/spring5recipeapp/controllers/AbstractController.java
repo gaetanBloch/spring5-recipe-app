@@ -14,13 +14,15 @@ import org.springframework.web.servlet.ModelAndView;
 @Slf4j
 class AbstractController {
     static final String VIEW_404_NOT_FOUND = "404error";
+    static final String ATTRIBUTE_EXCEPTION = "exception";
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound() {
+    public ModelAndView handleNotFound(Exception exception) {
         log.error("Handling not found exception");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName(VIEW_404_NOT_FOUND);
+        modelAndView.addObject(ATTRIBUTE_EXCEPTION, exception);
         return modelAndView;
     }
 }

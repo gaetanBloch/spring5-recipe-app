@@ -89,7 +89,8 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(VIEW_404_NOT_FOUND));
+                .andExpect(view().name(VIEW_404_NOT_FOUND))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
     }
 
     @Test
@@ -118,7 +119,8 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(VIEW_404_NOT_FOUND));
+                .andExpect(view().name(VIEW_404_NOT_FOUND))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
     }
 
     @Test
@@ -131,7 +133,8 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(VIEW_404_NOT_FOUND));
+                .andExpect(view().name(VIEW_404_NOT_FOUND))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
     }
 
     @Test
@@ -163,7 +166,8 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(VIEW_404_NOT_FOUND));
+                .andExpect(view().name(VIEW_404_NOT_FOUND))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
     }
 
     @Test
@@ -200,7 +204,8 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(VIEW_404_NOT_FOUND));
+                .andExpect(view().name(VIEW_404_NOT_FOUND))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
     }
 
     @Test
@@ -225,6 +230,7 @@ public class IngredientControllerTest {
 
                 // Then
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(VIEW_404_NOT_FOUND));
+                .andExpect(view().name(VIEW_404_NOT_FOUND))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
     }
 }
