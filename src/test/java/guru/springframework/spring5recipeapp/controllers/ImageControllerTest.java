@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
+import static guru.springframework.spring5recipeapp.controllers.AbstractController.VIEW_404_NOT_FOUND;
 import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_IMAGE;
 import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_RECIPE_IMAGE;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.ATTRIBUTE_RECIPE;
@@ -98,7 +99,8 @@ public class ImageControllerTest {
         mockMvc.perform(multipart(URI_IMAGE).file(multipartFile))
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 
     @Test

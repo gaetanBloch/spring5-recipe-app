@@ -88,7 +88,8 @@ public class IngredientControllerTest {
         mockMvc.perform(get(URI_INGREDIENTS))
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 
     @Test
@@ -116,7 +117,8 @@ public class IngredientControllerTest {
         mockMvc.perform(get(URI_INGREDIENT_SHOW))
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 
     @Test
@@ -128,7 +130,8 @@ public class IngredientControllerTest {
         mockMvc.perform(get(URI_INGREDIENT_NEW))
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 
     @Test
@@ -159,7 +162,8 @@ public class IngredientControllerTest {
         mockMvc.perform(get(URI_INGREDIENT_UPDATE))
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 
     @Test
@@ -195,7 +199,8 @@ public class IngredientControllerTest {
         )
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 
     @Test
@@ -219,6 +224,7 @@ public class IngredientControllerTest {
         mockMvc.perform(get(URI_INGREDIENT_DELETE))
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 }

@@ -59,7 +59,7 @@ public class RecipeControllerTest {
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name(VIEWS_RECIPE_SHOW_FORM))
+                .andExpect(view().name(VIEW_RECIPE_SHOW_FORM))
                 .andExpect(model().attributeExists(ATTRIBUTE_RECIPE));
     }
 
@@ -72,7 +72,8 @@ public class RecipeControllerTest {
         mockMvc.perform(get(URI_RECIPE_SHOW))
 
                 // Then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(VIEW_404_NOT_FOUND));
     }
 
     @Test
@@ -82,7 +83,7 @@ public class RecipeControllerTest {
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name(VIEWS_RECIPE_CREATE_OR_UPDATE_FORM))
+                .andExpect(view().name(VIEW_RECIPE_CREATE_OR_UPDATE_FORM))
                 .andExpect(model().attributeExists(ATTRIBUTE_RECIPE));
     }
 
@@ -113,7 +114,7 @@ public class RecipeControllerTest {
 
                 // Then
                 .andExpect(status().isOk())
-                .andExpect(view().name(VIEWS_RECIPE_CREATE_OR_UPDATE_FORM))
+                .andExpect(view().name(VIEW_RECIPE_CREATE_OR_UPDATE_FORM))
                 .andExpect(model().attributeExists(ATTRIBUTE_RECIPE));
     }
 

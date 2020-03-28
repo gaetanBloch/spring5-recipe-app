@@ -4,6 +4,7 @@ import guru.springframework.spring5recipeapp.commands.RecipeCommand;
 import guru.springframework.spring5recipeapp.services.CategoryService;
 import guru.springframework.spring5recipeapp.services.RecipeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
  * @author Gaetan Bloch
  * Created on 21/03/2020
  */
-@Controller
+@Slf4j
 @RequiredArgsConstructor
-final class RecipeController {
-    static final String VIEWS_RECIPE_SHOW_FORM = "recipe/show";
-    static final String VIEWS_RECIPE_CREATE_OR_UPDATE_FORM = "recipe/recipeform";
+@Controller
+final class RecipeController extends AbstractController {
+    static final String VIEW_RECIPE_SHOW_FORM = "recipe/show";
+    static final String VIEW_RECIPE_CREATE_OR_UPDATE_FORM = "recipe/recipeform";
     static final String ATTRIBUTE_RECIPE = "recipe";
     static final String ATTRIBUTE_CATEGORIES = "categories";
     static final String URL_RECIPE = "/recipe";
@@ -34,21 +36,21 @@ final class RecipeController {
     @GetMapping(URL_RECIPE_SHOW)
     public String showRecipe(@PathVariable String id, Model model) {
         model.addAttribute(ATTRIBUTE_RECIPE, recipeService.findById(Long.valueOf(id)));
-        return VIEWS_RECIPE_SHOW_FORM;
+        return VIEW_RECIPE_SHOW_FORM;
     }
 
     @GetMapping(URL_RECIPE_NEW)
     public String newRecipe(Model model) {
         model.addAttribute(ATTRIBUTE_RECIPE, new RecipeCommand());
         model.addAttribute(ATTRIBUTE_CATEGORIES, categoryService.findAll());
-        return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
+        return VIEW_RECIPE_CREATE_OR_UPDATE_FORM;
     }
 
     @GetMapping(URL_RECIPE_UPDATE)
     public String updateRecipe(@PathVariable String id, Model model) {
         model.addAttribute(ATTRIBUTE_RECIPE, recipeService.findCommandById(Long.valueOf(id)));
         model.addAttribute(ATTRIBUTE_CATEGORIES, categoryService.findAll());
-        return VIEWS_RECIPE_CREATE_OR_UPDATE_FORM;
+        return VIEW_RECIPE_CREATE_OR_UPDATE_FORM;
     }
 
     @PostMapping(URL_RECIPE)
