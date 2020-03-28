@@ -78,6 +78,17 @@ public class RecipeControllerTest {
     }
 
     @Test
+    public void getRecipeNumberFormatExceptionTest() throws Exception {
+        // When
+        mockMvc.perform(get(URL_RECIPE + "/foo/show"))
+
+                // Then
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name(VIEW_400_BAD_REQUEST))
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION));
+    }
+
+    @Test
     public void getNewRecipeFormTest() throws Exception {
         // When
         mockMvc.perform(get(URL_RECIPE_NEW))
