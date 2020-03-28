@@ -23,7 +23,7 @@ import static guru.springframework.spring5recipeapp.controllers.RecipeController
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-final class IngredientController extends AbstractController {
+final class IngredientController {
     static final String VIEW_INGREDIENT_LIST = "recipe/ingredient/list";
     static final String VIEW_INGREDIENT_SHOW = "recipe/ingredient/show";
     static final String VIEW_CREATE_OR_UPDATE_INGREDIENT_FORM = "recipe/ingredient/ingredientform";

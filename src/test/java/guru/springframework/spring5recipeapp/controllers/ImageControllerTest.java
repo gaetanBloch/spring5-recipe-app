@@ -20,10 +20,8 @@ import java.net.URI;
 import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
-import static guru.springframework.spring5recipeapp.controllers.AbstractController.ATTRIBUTE_EXCEPTION;
-import static guru.springframework.spring5recipeapp.controllers.AbstractController.VIEW_404_NOT_FOUND;
-import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_IMAGE;
-import static guru.springframework.spring5recipeapp.controllers.ImageController.URL_RECIPE_IMAGE;
+import static guru.springframework.spring5recipeapp.controllers.ControllerExceptionHandler.*;
+import static guru.springframework.spring5recipeapp.controllers.ImageController.*;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.ATTRIBUTE_RECIPE;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.URL_RECIPE;
 import static org.junit.Assert.assertEquals;
@@ -53,7 +51,9 @@ public class ImageControllerTest {
     @Before
     public void setUp() {
         ImageController imageController = new ImageController(recipeService, imageService);
-        mockMvc = MockMvcBuilders.standaloneSetup(imageController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(imageController)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -67,9 +67,20 @@ public class ImageControllerTest {
                 // Then
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists(ATTRIBUTE_RECIPE))
-                .andExpect(view().name(ImageController.VIEW_IMAGE_UPLOAD_FORM));
+                .andExpect(view().name(VIEW_IMAGE_UPLOAD_FORM));
 
         verify(recipeService).findCommandById(ID);
+    }
+
+    @Test
+    public void showImageUploadNumberFormatExceptionTest() throws Exception {
+        // When
+        mockMvc.perform(get(URL_RECIPE + "/foo/image"))
+
+                // Then
+                .andExpect(status().isBadRequest())
+                .andExpect(model().attributeExists(ATTRIBUTE_EXCEPTION))
+                .andExpect(view().name(VIEW_400_BAD_REQUEST));
     }
 
     @Test

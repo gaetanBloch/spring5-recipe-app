@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Slf4j
 @RequiredArgsConstructor
 @Controller
-final class RecipeController extends AbstractController {
+final class RecipeController {
     static final String VIEW_RECIPE_SHOW_FORM = "recipe/show";
     static final String VIEW_RECIPE_CREATE_OR_UPDATE_FORM = "recipe/recipeform";
     static final String ATTRIBUTE_RECIPE = "recipe";

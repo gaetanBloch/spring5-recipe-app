@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
+import static guru.springframework.spring5recipeapp.controllers.ControllerExceptionHandler.*;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -46,7 +47,9 @@ public class RecipeControllerTest {
 
     @Before
     public void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new RecipeController(recipeService, categoryService)).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new RecipeController(recipeService, categoryService))
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test

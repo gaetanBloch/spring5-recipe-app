@@ -28,7 +28,7 @@ import static guru.springframework.spring5recipeapp.controllers.RecipeController
 @RequiredArgsConstructor
 @Slf4j
 @Controller
-final class ImageController extends AbstractController {
+final class ImageController {
     static final String VIEW_IMAGE_UPLOAD_FORM = "recipe/imageuploadform";
     static final String URL_IMAGE = URL_RECIPE + "/{id}/image";
     static final String URL_RECIPE_IMAGE = URL_RECIPE + "/{id}/recipeimage";

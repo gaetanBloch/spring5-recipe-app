@@ -23,6 +23,8 @@ import java.util.Map;
 
 import static guru.springframework.spring5recipeapp.TestUtils.ID;
 import static guru.springframework.spring5recipeapp.TestUtils.ID2;
+import static guru.springframework.spring5recipeapp.controllers.ControllerExceptionHandler.ATTRIBUTE_EXCEPTION;
+import static guru.springframework.spring5recipeapp.controllers.ControllerExceptionHandler.VIEW_404_NOT_FOUND;
 import static guru.springframework.spring5recipeapp.controllers.IngredientController.*;
 import static guru.springframework.spring5recipeapp.controllers.RecipeController.ATTRIBUTE_RECIPE;
 import static org.mockito.ArgumentMatchers.any;
@@ -60,7 +62,9 @@ public class IngredientControllerTest {
     public void setUp() {
         IngredientController controller = new IngredientController(
                 recipeService, ingredientService, unitOfMeasureService);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
