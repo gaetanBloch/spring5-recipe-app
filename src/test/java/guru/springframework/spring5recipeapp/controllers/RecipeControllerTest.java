@@ -122,9 +122,6 @@ public class RecipeControllerTest {
 
     @Test
     public void postNewRecipeFormValidationFailTest() throws Exception {
-        // Given
-        when(recipeService.saveRecipeCommand(any())).thenReturn(RecipeCommand.builder().id(ID).build());
-
         // When
         mockMvc.perform(post(URL_RECIPE)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
