@@ -29,8 +29,7 @@ jobs:
 
       # run tests! and gen code coverage
       - run: mvn install
-      - run: mvn test
-      - run: mvn cobertura:cobertura
+      - run: mvn integration-test
       - run: bash <(curl -s https://codecov.io/bash)
 
       - save_cache:
